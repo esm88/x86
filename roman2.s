@@ -152,20 +152,13 @@ cmp eax, 9
 je nine
 cmp eax, 4
 je four
-
-mov edx, 0
-mov ebx, 5
-idiv ebx
-cmp eax, 0
-je one
-
-five_loop:
+cmp eax, 5
+jl one
 
 mov [edi], byte 'V'
 inc edi
-dec eax
-cmp eax, 0
-jg five_loop
+sub eax, 5
+mov edx, eax
 jmp one
 
 nine:
