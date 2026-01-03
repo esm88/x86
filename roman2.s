@@ -14,8 +14,7 @@ global to_roman
 
 to_roman:
 
-push ebp
-mov ebp, esp
+enter 0, 0
 
 mov eax, ebp[ST_VALUE]
 mov edi, ebp[ST_BUFFER]
@@ -27,23 +26,26 @@ jge error
 
 thousand: ; thousands
 
-mov edx, 0
-mov ebx, 1000
+mov edx, 0 ; edx must be 0 for division
+mov ebx, 1000 ; divisor
 idiv ebx
+; now: eax = quotient, edx = remainder
 cmp eax, 0
 je five_hundred
 
 thousand_loop:
 
+; quotient eax becomes loop counter
+
 mov [edi], byte 'M'
-inc edi
+inc edi ; pointer to current char
 dec eax
 cmp eax, 0
 jg thousand_loop
 
 five_hundred: ; five-hundreds
 
-mov eax, edx ; use remainder
+mov eax, edx ; remainder becomes new dividend
 cmp eax, 900
 jge nine_hundred
 cmp eax, 500
@@ -208,6 +210,5 @@ mov [edi], byte 0Ah ; newline
 inc edi
 mov [edi], byte 0 ; null-terminate
 
-mov esp, ebp
-pop ebp
+leave
 ret
